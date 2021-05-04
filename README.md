@@ -17,4 +17,6 @@ docker run  --name backend --network pfa-network igor86/pfa-api:1.0
 
 docker run -d -p 8888:80 --network pfa-network igor86/pfa-nginx
 
+Acessar o browser : http://localhost:8888/modulo
+
 
