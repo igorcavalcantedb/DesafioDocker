@@ -1,0 +1,49 @@
+version: '3.7'
+
+#para roder os services abaixo
+#docker-compose up -d
+
+#para terminar os services abaixo
+#docker-compose down 
+
+services:
+  
+  pfa-db:
+    image: mysql:5.7
+    container_name: pfa-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./DB/dbdata:/var/lib/mysql
+      - ./DB/db:/docker-entrypoint-initdb.d/
+    networks:
+      - backend
+
+  backend:
+    image: igor86/pfa-api:1.1
+    container_name: api
+    restart: always
+    entrypoint: dockerize -wait tcp://pfa-db:3306 -timeout 10s java -jar /app.jar
+    networks:
+      - backend
+      - gateway
+    depends_on: 
+      - pfa-db
+
+  nginx:
+    image: igor86/pfa-nginx
+    ports:
+      - "8000:80"
+    depends_on:
+      - backend
+    restart: always
+    networks: 
+      - gateway
+
+networks:     
+  backend:
+    driver: bridge
+  gateway:  
+    driver: bridge
+    
