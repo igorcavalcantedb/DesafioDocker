@@ -9,3 +9,12 @@ Crie um repositório no github com todo o fonte do programa e das imagens gerada
 Crie um arquivo README.md especificando quais comandos precisamos executar para que a aplicação funcione recebendo as solicitações na porta 8888 de nosso computador. Lembrando que NÃO utilizaremos Docker-compose nesse desafio.
 
 
+docker create network pfa-network
+
+docker run  --name pfa-db --network pfa-network igor86/pfa-db
+
+docker run  --name backend --network pfa-network igor86/pfa-api:1.0
+
+docker run -d -p 8888:80 --network pfa-network igor86/pfa-nginx
+
+
